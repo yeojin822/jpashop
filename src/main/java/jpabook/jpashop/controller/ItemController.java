@@ -69,6 +69,7 @@ public class ItemController {
      */
     @PostMapping(value = "/items/{itemId}/edit")
     public String updateItem(@ModelAttribute("form") BookForm form) {
+        //준영속 상태의 객체
         Book book = new Book();
         book.setId(form.getId());
         book.setName(form.getName());
@@ -76,7 +77,17 @@ public class ItemController {
         book.setStockQuantity(form.getStockQuantity());
         book.setAuthor(form.getAuthor());
         book.setIsbn(form.getIsbn());
+
         itemService.saveItem(book);
+        return "redirect:/items";
+    }
+
+    /**
+     *상품 수정,권장 코드
+     */
+    @PostMapping(value = "/items/{itemId}/edit")
+    public String updateItem(@PathVariable("itemId") Long itemId,@ModelAttribute("form") BookForm form) {
+        itemService.updateItem(itemId, form.getName(), form.getPrice(), form.getStockQuantity());
         return "redirect:/items";
     }
 }
